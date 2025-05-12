@@ -1,8 +1,8 @@
 
-import LandingPage from "@/pages/LandingPage";
+import { Navigate } from "react-router-dom";
 
 const Index = () => {
-  return <LandingPage />;
+  return <Navigate to="/" replace />;
 };
 
 export default Index;

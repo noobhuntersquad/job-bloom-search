@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search, User, Menu, X } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 interface NavItem {
   label: string;
@@ -16,7 +17,7 @@ const navItems: NavItem[] = [
 ];
 
 export function Navbar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -48,7 +49,7 @@ export function Navbar() {
             <Link to="/dashboard">
               <Button variant="outline" size="sm" className="hidden md:flex">
                 <User className="h-4 w-4 mr-1" />
-                Dashboard
+                {user?.firstName || "Dashboard"}
               </Button>
             </Link>
           ) : (

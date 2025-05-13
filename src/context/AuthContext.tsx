@@ -37,6 +37,7 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const checkAuth = async () => {
     try {
@@ -45,13 +46,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const token = authService.getToken();
       
       if (token) {
-        // In a real app, you'd verify the token and get user data
-        // For now, we'll just assume the user is logged in if a token exists
+        // For demo purposes, we'll create a mock user when token exists
+        // In a real app, you'd fetch the user data from a protected endpoint
+        setUser({
+          id: "user-123",
+          username: "demouser",
+          firstName: "Demo",
+          lastName: "User",
+          email: "demo@example.com",
+          plan: "free"
+        });
         setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
       }
     } catch (error) {
       console.error("Auth check failed:", error);
       authService.clearToken();
+      setIsAuthenticated(false);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -60,8 +74,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     checkAuth();
   }, []);
-
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(authService.isAuthenticated());
 
   const login = async (username: string, password: string) => {
     setIsLoading(true);
